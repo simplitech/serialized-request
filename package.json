@@ -5,7 +5,7 @@
   "keywords": [],
   "main": "dist/serialized-request.umd.js",
   "module": "dist/serialized-request.es5.js",
-  "typings": "dist/types/serialized-request.d.ts",
+  "typings": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
