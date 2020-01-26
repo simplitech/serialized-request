@@ -122,5 +122,10 @@
   "peerDependencies": {
     "class-transformer": "^0.2.3",
     "axios": "^0.19.2"
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "dependencies": {}
 }
