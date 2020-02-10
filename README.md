@@ -127,12 +127,12 @@ Useful for loading interactions
 // on this example we are setting counters for when the request start and end
 let startCbCount = 0
 let endCbCount = 0
-const startCb = () => startCbCount++
-const endCb = () => endCbCount++
+const startCb = (requestName: string) => startCbCount++
+const endCb = (requestName: string) => endCbCount++
 
 // then we register the listeners passing a name
-RequestListener.onRequestStart('foo', startCb)
-RequestListener.onRequestEnd('foo', endCb)
+RequestListener.onRequestStart(startCb)
+RequestListener.onRequestEnd(endCb)
 
 // make the request
 const myBlogPost = await Request.get('https://jsonplaceholder.typicode.com/posts/1')
@@ -143,8 +143,8 @@ const myBlogPost = await Request.get('https://jsonplaceholder.typicode.com/posts
 // then the listeners will be called
 // startCbCount and endCbCount are both 1 now
 
-RequestListener.clearListener('foo', startCb) // you can remove the specific listener
-RequestListener.clearListener('foo') // or remove all listeners of that name
+RequestListener.removeListener(startCb) // you can remove the specific listener
+RequestListener.clearListeners() // or remove all listeners of that name
 ```
 Listeners can use the endpoint instead of the request name aswell
 

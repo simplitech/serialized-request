@@ -44,12 +44,12 @@ nostrum rerum est autem sunt rem eveniet architecto`,
   it("can get a BlogPost with many features", async () => {
     let startCbCount = 0
     let endCbCount = 0
-    RequestListener.onRequestStart('foo', () => startCbCount++)
-    RequestListener.onRequestEnd('foo', () => endCbCount++)
+    RequestListener.onRequestStart(() => startCbCount++)
+    RequestListener.onRequestEnd(() => endCbCount++)
     const startCb = () => {/**/}
     const endCb = () => {/**/}
-    RequestListener.onRequestStart('foo', startCb)
-    RequestListener.onRequestEnd('foo', endCb)
+    RequestListener.onRequestStart(startCb)
+    RequestListener.onRequestEnd(endCb)
 
     const myBlogPost = new BlogPostWithCallbackResponses()
 
@@ -75,60 +75,21 @@ nostrum rerum est autem sunt rem eveniet architecto`,
     expect(startCbCount).toBe(1)
     expect(endCbCount).toBe(1)
 
-    expect(RequestListener.startListenerCount('foo')).toBe(2)
-    expect(RequestListener.endListenerCount('foo')).toBe(2)
-    expect(RequestListener.startListenerCount('foo', startCb)).toBe(1)
-    expect(RequestListener.endListenerCount('foo', endCb)).toBe(1)
-    RequestListener.clearListener('foo', startCb)
-    expect(RequestListener.startListenerCount('foo')).toBe(1)
-    expect(RequestListener.endListenerCount('foo')).toBe(2)
-    RequestListener.clearListener('foo', endCb)
-    expect(RequestListener.startListenerCount('foo')).toBe(1)
-    expect(RequestListener.endListenerCount('foo')).toBe(1)
-    expect(RequestListener.startListenerCount('foo', startCb)).toBe(0)
-    expect(RequestListener.endListenerCount('foo', endCb)).toBe(0)
-    RequestListener.clearListener('foo')
-    expect(RequestListener.startListenerCount('foo')).toBe(0)
-    expect(RequestListener.endListenerCount('foo')).toBe(0)
-  })
-
-
-  it("can get a BlogPost with many features", async () => {
-    let startCbCount = 0
-    let endCbCount = 0
-    RequestListener.onRequestStart(null, () => startCbCount++)
-    RequestListener.onRequestEnd(null, () => endCbCount++)
-    const startCb = () => {/**/}
-    const endCb = () => {/**/}
-    RequestListener.onRequestStart(null, startCb)
-    RequestListener.onRequestEnd(null, endCb)
-
-    const myBlogPost = new BlogPostWithCallbackResponses()
-
-    await Request.get('https://jsonplaceholder.typicode.com/posts/1')
-      .name('foo')
-      .delay(500)
-      .as(myBlogPost)
-      .getData()
-
-    expect(startCbCount).toBe(1)
-    expect(endCbCount).toBe(1)
-
-    expect(RequestListener.startListenerCount(null)).toBe(2)
-    expect(RequestListener.endListenerCount(null)).toBe(2)
-    expect(RequestListener.startListenerCount(null, startCb)).toBe(1)
-    expect(RequestListener.endListenerCount(null, endCb)).toBe(1)
-    RequestListener.clearListener(null, startCb)
-    expect(RequestListener.startListenerCount(null)).toBe(1)
-    expect(RequestListener.endListenerCount(null)).toBe(2)
-    RequestListener.clearListener(null, endCb)
-    expect(RequestListener.startListenerCount(null)).toBe(1)
-    expect(RequestListener.endListenerCount(null)).toBe(1)
-    expect(RequestListener.startListenerCount(null, startCb)).toBe(0)
-    expect(RequestListener.endListenerCount(null, endCb)).toBe(0)
-    RequestListener.clearListener(null)
-    expect(RequestListener.startListenerCount(null)).toBe(0)
-    expect(RequestListener.endListenerCount(null)).toBe(0)
+    expect(RequestListener.startListenerCount()).toBe(2)
+    expect(RequestListener.endListenerCount()).toBe(2)
+    expect(RequestListener.startListenerCount(startCb)).toBe(1)
+    expect(RequestListener.endListenerCount(endCb)).toBe(1)
+    RequestListener.removeListener(startCb)
+    expect(RequestListener.startListenerCount()).toBe(1)
+    expect(RequestListener.endListenerCount()).toBe(2)
+    RequestListener.removeListener(endCb)
+    expect(RequestListener.startListenerCount()).toBe(1)
+    expect(RequestListener.endListenerCount()).toBe(1)
+    expect(RequestListener.startListenerCount(startCb)).toBe(0)
+    expect(RequestListener.endListenerCount(endCb)).toBe(0)
+    RequestListener.clearListeners()
+    expect(RequestListener.startListenerCount()).toBe(0)
+    expect(RequestListener.endListenerCount()).toBe(0)
   })
 
   it("can get an array of BlogPost", async () => {

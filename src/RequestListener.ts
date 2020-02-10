@@ -1,132 +1,65 @@
-import { Dictionary } from './Dictionary'
-
 interface CallbackType { (name: string): void }
-const callbacksStartByName: Dictionary<CallbackType[]> = {}
-const callbacksEndByName: Dictionary<CallbackType[]> = {}
 const callbacksStart: CallbackType[] = []
 const callbacksEnd: CallbackType[] = []
 
 export default {
   emitRequestStart(name: string) {
-    const callbacks = callbacksStartByName[name]
-    if (callbacks) {
-      callbacks.forEach(c => c(name))
-    }
-    callbacksStart.forEach(c => c(name))
+    this.emitRequest(name, callbacksStart)
   },
   emitRequestEnd(name: string) {
-    const callbacks = callbacksEndByName[name]
+    this.emitRequest(name, callbacksEnd)
+  },
+  emitRequest(name: string, callbacks: CallbackType[] | null) {
     if (callbacks) {
       callbacks.forEach(c => c(name))
     }
-    callbacksEnd.forEach(c => c(name))
   },
-  onRequestStart(name: string | null, cb: CallbackType) {
-    if (!name) {
-      callbacksStart.push(cb)
-    } else {
-      if (!callbacksStartByName[name]) {
-        callbacksStartByName[name] = []
-      }
-      callbacksStartByName[name].push(cb)
+  onRequestStart(cb: CallbackType) {
+    callbacksStart.push(cb)
+  },
+  onRequestEnd(cb: CallbackType) {
+    callbacksEnd.push(cb)
+  },
+  removeStartListener(cb: CallbackType) {
+    this.removeListenerOf(cb, callbacksStart)
+  },
+  removeEndListener(cb: CallbackType) {
+    this.removeListenerOf(cb, callbacksEnd)
+  },
+  removeListenerOf(cb: CallbackType, callbacks: CallbackType[]) {
+    const index = callbacks.indexOf(cb)
+    if (index > -1) {
+      callbacks.splice(index, 1)
     }
   },
-  onRequestEnd(name: string | null, cb: CallbackType) {
-    if (!name) {
-      callbacksEnd.push(cb)
-    } else {
-      if (!callbacksEndByName[name]) {
-        callbacksEndByName[name] = []
-      }
-      callbacksEndByName[name].push(cb)
-    }
+  removeListener(cb: CallbackType) {
+    this.removeStartListener(cb)
+    this.removeEndListener(cb)
   },
-  clearStartListener(name: string | null, cb?: CallbackType) {
-    if (!name) {
-      if (!cb) {
-        callbacksStart.splice(0, callbacksStart.length)
-        return
-      }
-      const index = callbacksStart.indexOf(cb)
-      if (index > -1) {
-        callbacksStart.splice(index, 1)
-      }
-    } else {
-      if (!cb) {
-        delete callbacksStartByName[name]
-      } else {
-        const list = callbacksStartByName[name]
-        const index = list.indexOf(cb)
-        if (index > -1) {
-          list.splice(index, 1)
-        }
-      }
-    }
+  clearStartListeners() {
+    this.clearListenersOf(callbacksStart)
   },
-  clearEndListener(name: string | null, cb?: CallbackType) {
-    if (!name) {
-      if (!cb) {
-        callbacksEnd.splice(0, callbacksEnd.length)
-        return
-      }
-      const index = callbacksEnd.indexOf(cb)
-      if (index > -1) {
-        callbacksEnd.splice(index, 1)
-      }
-    } else {
-      if (!cb) {
-        delete callbacksEndByName[name]
-      } else {
-        const list = callbacksEndByName[name]
-        const index = list.indexOf(cb)
-        if (index > -1) {
-          list.splice(index, 1)
-        }
-      }
-    }
+  clearEndListeners() {
+    this.clearListenersOf(callbacksEnd)
   },
-  clearListener(name: string | null, cb?: CallbackType) {
-    this.clearStartListener(name, cb)
-    this.clearEndListener(name, cb)
+  clearListenersOf(callbacks: CallbackType[]) {
+    callbacks.splice(0, callbacks.length)
   },
-  startListenerCount(name: string | null, cb?: CallbackType) {
-    if (!name) {
-      if (!cb) {
-        return callbacksStart.length
-      }
-
-      return callbacksStart.indexOf(cb) === -1 ? 0 : 1
-    } else {
-      const list = callbacksStartByName[name]
-      if (!list) {
-        return 0
-      }
-
-      if (!cb) {
-        return list.length
-      }
-
-      return list.indexOf(cb) === -1 ? 0 : 1
-    }
+  clearListeners() {
+    this.clearStartListeners()
+    this.clearEndListeners()
   },
-  endListenerCount(name: string | null, cb?: CallbackType) {
-    if (!name) {
-      if (!cb) {
-        return callbacksEnd.length
-      }
-
-      return callbacksEnd.indexOf(cb) === -1 ? 0 : 1
-    } else {
-      const list = callbacksEndByName[name]
-      if (!list) {
-        return 0
-      }
-
-      if (!cb) {
-        return list.length
-      }
-
-      return list.indexOf(cb) === -1 ? 0 : 1
+  startListenerCount(cb: CallbackType | null = null) {
+    return this.listenerCount(cb, callbacksStart)
+  },
+  endListenerCount(cb: CallbackType | null = null) {
+    return this.listenerCount(cb, callbacksEnd)
+  },
+  listenerCount(cb: CallbackType | null = null, callbacks: CallbackType[]) {
+    if (!cb) {
+      return callbacks.length
     }
+
+    return callbacks.indexOf(cb) === -1 ? 0 : 1
   },
 }
