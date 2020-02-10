@@ -91,6 +91,46 @@ nostrum rerum est autem sunt rem eveniet architecto`,
     expect(RequestListener.startListenerCount('foo')).toBe(0)
     expect(RequestListener.endListenerCount('foo')).toBe(0)
   })
+
+
+  it("can get a BlogPost with many features", async () => {
+    let startCbCount = 0
+    let endCbCount = 0
+    RequestListener.onRequestStart(null, () => startCbCount++)
+    RequestListener.onRequestEnd(null, () => endCbCount++)
+    const startCb = () => {/**/}
+    const endCb = () => {/**/}
+    RequestListener.onRequestStart(null, startCb)
+    RequestListener.onRequestEnd(null, endCb)
+
+    const myBlogPost = new BlogPostWithCallbackResponses()
+
+    await Request.get('https://jsonplaceholder.typicode.com/posts/1')
+      .name('foo')
+      .delay(500)
+      .as(myBlogPost)
+      .getData()
+
+    expect(startCbCount).toBe(1)
+    expect(endCbCount).toBe(1)
+
+    expect(RequestListener.startListenerCount(null)).toBe(2)
+    expect(RequestListener.endListenerCount(null)).toBe(2)
+    expect(RequestListener.startListenerCount(null, startCb)).toBe(1)
+    expect(RequestListener.endListenerCount(null, endCb)).toBe(1)
+    RequestListener.clearListener(null, startCb)
+    expect(RequestListener.startListenerCount(null)).toBe(1)
+    expect(RequestListener.endListenerCount(null)).toBe(2)
+    RequestListener.clearListener(null, endCb)
+    expect(RequestListener.startListenerCount(null)).toBe(1)
+    expect(RequestListener.endListenerCount(null)).toBe(1)
+    expect(RequestListener.startListenerCount(null, startCb)).toBe(0)
+    expect(RequestListener.endListenerCount(null, endCb)).toBe(0)
+    RequestListener.clearListener(null)
+    expect(RequestListener.startListenerCount(null)).toBe(0)
+    expect(RequestListener.endListenerCount(null)).toBe(0)
+  })
+
   it("can get an array of BlogPost", async () => {
     const blogPosts = await Request.get('https://jsonplaceholder.typicode.com/posts')
       .asArrayOf(BlogPost)
