@@ -1,6 +1,6 @@
 {
   "name": "@simpli/serialized-request",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Make HTTP requests and serialize/deserialize the request and response to Javascript/Typescript class objects",
   "keywords": [],
   "main": "dist/serialized-request.umd.js",
