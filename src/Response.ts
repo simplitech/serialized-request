@@ -4,8 +4,8 @@ import { Request } from './Request'
 import { ResponseType } from './ResponseType'
 import { ResponseEvent } from './ResponseEvent'
 import { ClassType } from './ClassType'
-import Config from './Config'
 import RequestListener from './RequestListener'
+import { RequestConfig } from './Config'
 
 /**
  * The Response is an auxiliary class of [[Request]].
@@ -181,7 +181,7 @@ export class Response<T = any> {
       await this.sleep(requestDelay)
     }
 
-    const response = await Config.axios.request<T>(axiosConfig)
+    const response = await RequestConfig.axios.request<T>(axiosConfig)
 
     RequestListener.emitRequestEnd(requestName || endpoint)
 

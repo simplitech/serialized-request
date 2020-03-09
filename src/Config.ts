@@ -1,5 +1,5 @@
 import axios from 'axios'
 
-export default {
+export const RequestConfig = {
   axios: axios.create(),
 }
