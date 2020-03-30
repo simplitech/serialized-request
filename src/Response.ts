@@ -177,11 +177,18 @@ export class Response<T = any> {
 
     RequestListener.emitRequestStart(requestName || endpoint)
 
-    if (requestDelay) {
-      await this.sleep(requestDelay)
-    }
+    let response: AxiosResponse<T> | null = null
+    try {
+      if (requestDelay) {
+        await this.sleep(requestDelay)
+      }
 
-    const response = await RequestConfig.axios.request<T>(axiosConfig)
+      response = await RequestConfig.axios.request<T>(axiosConfig)
+
+    } catch (e) {
+      RequestListener.emitRequestError(requestName || endpoint)
+      throw e
+    }
 
     RequestListener.emitRequestEnd(requestName || endpoint)
 
