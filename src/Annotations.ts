@@ -17,6 +17,10 @@ export function HttpExpose(name?: string) {
   return Expose({ name })
 }
 
+export function GroupsExpose(groups: string[], name?: string) {
+  return Expose({ name, groups })
+}
+
 export function RequestExclude() {
   return Exclude({ toPlainOnly: true })
 }
