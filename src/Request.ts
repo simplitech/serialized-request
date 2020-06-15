@@ -2,9 +2,9 @@ import { AxiosRequestConfig } from 'axios'
 import { classToPlain } from 'class-transformer'
 import { Response } from './Response'
 import { ResponseType } from './ResponseType'
+import { ClassTransformOptions } from 'class-transformer/ClassTransformOptions'
 
 export class Request {
-
   constructor(axiosConfig: AxiosRequestConfig) {
     this.axiosConfig = axiosConfig
   }
@@ -29,18 +29,45 @@ export class Request {
     return new Request(Object.assign(localConfig, axiosConfig))
   }
 
-  static post(url: string, data?: any, axiosConfig?: AxiosRequestConfig) {
-    const localConfig: AxiosRequestConfig = { method: 'POST', url, data: classToPlain(data) }
+  static post(
+    url: string,
+    data?: any,
+    axiosConfig?: AxiosRequestConfig,
+    classTransformOptions?: ClassTransformOptions
+  ) {
+    const localConfig: AxiosRequestConfig = {
+      method: 'POST',
+      url,
+      data: classToPlain(data, classTransformOptions)
+    }
     return new Request(Object.assign(localConfig, axiosConfig))
   }
 
-  static put(url: string, data?: any, axiosConfig?: AxiosRequestConfig) {
-    const localConfig: AxiosRequestConfig = { method: 'PUT', url, data: classToPlain(data) }
+  static put(
+    url: string,
+    data?: any,
+    axiosConfig?: AxiosRequestConfig,
+    classTransformOptions?: ClassTransformOptions
+  ) {
+    const localConfig: AxiosRequestConfig = {
+      method: 'PUT',
+      url,
+      data: classToPlain(data, classTransformOptions)
+    }
     return new Request(Object.assign(localConfig, axiosConfig))
   }
 
-  static patch(url: string, data?: any, axiosConfig?: AxiosRequestConfig) {
-    const localConfig: AxiosRequestConfig = { method: 'PATCH', url, data: classToPlain(data) }
+  static patch(
+    url: string,
+    data?: any,
+    axiosConfig?: AxiosRequestConfig,
+    classTransformOptions?: ClassTransformOptions
+  ) {
+    const localConfig: AxiosRequestConfig = {
+      method: 'PATCH',
+      url,
+      data: classToPlain(data, classTransformOptions)
+    }
     return new Request(Object.assign(localConfig, axiosConfig))
   }
 
