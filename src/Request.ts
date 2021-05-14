@@ -1,8 +1,7 @@
 import { AxiosRequestConfig } from 'axios'
-import { classToPlain } from 'class-transformer'
+import { classToPlain, ClassTransformOptions } from 'class-transformer'
 import { Response } from './Response'
 import { ResponseType } from './ResponseType'
-import { ClassTransformOptions } from 'class-transformer/ClassTransformOptions'
 
 export class Request {
   constructor(axiosConfig: AxiosRequestConfig) {
