@@ -21,8 +21,7 @@
   "scripts": {
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
-    "build2": "rimraf dist && tsc && rollup -c rollup.config.js",
-    "build": "tsc --module commonjs && rollup -c rollup.config.ts --configPlugin typescript && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "build": "tsc --module es6 && rollup -c rollup.config.ts --bundleConfigAsCjs --target es6",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
@@ -86,6 +85,7 @@
     "@commitlint/cli": "^17.4.2",
     "@commitlint/config-conventional": "^7.1.2",
     "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
     "@types/jest": "^29.2.6",
     "@types/node": "^18.11.18",
     "axios": "^1.2.4",

@@ -1,13 +1,11 @@
 // rollup.config.js
+import typescript from '@rollup/plugin-typescript';
 
-import merge from 'deepmerge';
-import { createBasicConfig } from '@open-wc/building-rollup';
-
-const baseConfig = createBasicConfig();
-
-export default merge(baseConfig, {
-  input: 'dist/lib/index.js',
+export default {
+  input: 'src/index.ts',
   output: {
-      dir: 'dist',
-  }
-});
+    dir: 'dist',
+    format: 'cjs'
+  },
+  plugins: [typescript()]
+};
